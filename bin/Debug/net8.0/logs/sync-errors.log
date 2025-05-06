@@ -1,0 +1,38 @@
+[5/6/2025 5:49:22 PM] [Table: HydrostaticTable] SQLite Error 14: 'unable to open database file'.
+[5/6/2025 5:49:22 PM] [Table: VesselParticulars] SQLite Error 14: 'unable to open database file'.
+[5/6/2025 5:49:22 PM] [Table: Threads] SQLite Error 14: 'unable to open database file'.
+[5/6/2025 5:49:22 PM] [Table: Threads] SQLite Error 14: 'unable to open database file'.
+[5/6/2025 5:49:22 PM] [Table: Messages] SQLite Error 14: 'unable to open database file'.
+[5/6/2025 5:49:22 PM] [Table: Messages] SQLite Error 14: 'unable to open database file'.
+[5/6/2025 5:49:22 PM] [Table: Threads] SQLite Error 14: 'unable to open database file'.
+[5/6/2025 5:49:22 PM] [Table: Threads] SQLite Error 14: 'unable to open database file'.
+[5/6/2025 7:22:11 PM] [Table: HydrostaticTable] SQLite Error 14: 'unable to open database file'.
+[5/6/2025 7:22:11 PM] [Table: VesselParticulars] SQLite Error 14: 'unable to open database file'.
+[5/6/2025 7:22:12 PM] [Table: Threads] SQLite Error 14: 'unable to open database file'.
+[5/6/2025 7:22:17 PM] [Table: Threads] SQLite Error 14: 'unable to open database file'.
+[5/6/2025 7:22:18 PM] [Table: Messages] SQLite Error 14: 'unable to open database file'.
+[5/6/2025 7:23:31 PM] [Table: HydrostaticTable] SQLite Error 14: 'unable to open database file'.
+[5/6/2025 7:23:31 PM] [Table: VesselParticulars] SQLite Error 14: 'unable to open database file'.
+[5/6/2025 7:23:31 PM] [Table: Threads] SQLite Error 14: 'unable to open database file'.
+[5/6/2025 7:24:17 PM] [Table: Threads] SQLite Error 14: 'unable to open database file'.
+[5/6/2025 7:24:17 PM] [Table: Messages] SQLite Error 14: 'unable to open database file'.
+[5/6/2025 7:24:18 PM] [Table: Messages] SQLite Error 14: 'unable to open database file'.
+[5/6/2025 7:24:18 PM] [Table: Threads] SQLite Error 14: 'unable to open database file'.
+[5/6/2025 7:24:18 PM] [Table: Threads] SQLite Error 14: 'unable to open database file'.
+[5/6/2025 7:25:20 PM] [Table: HydrostaticTable] SQLite Error 14: 'unable to open database file'.
+[5/6/2025 7:26:30 PM] [Table: VesselParticulars] SQLite Error 14: 'unable to open database file'.
+[5/6/2025 7:26:30 PM] [Table: Threads] SQLite Error 14: 'unable to open database file'.
+[5/6/2025 7:26:34 PM] [Table: Threads] SQLite Error 14: 'unable to open database file'.
+[5/6/2025 7:26:34 PM] [Table: Messages] SQLite Error 14: 'unable to open database file'.
+[5/6/2025 7:26:34 PM] [Table: Messages] SQLite Error 14: 'unable to open database file'.
+[5/6/2025 7:26:34 PM] [Table: Threads] SQLite Error 14: 'unable to open database file'.
+[5/6/2025 7:26:34 PM] [Table: Threads] SQLite Error 14: 'unable to open database file'.
+[5/6/2025 7:46:31 PM] [Table: VesselParticulars] SQLite Error 1: 'no such column: VesselDanaosId'.
+[5/6/2025 7:46:31 PM] [Table: Threads] The INSERT statement conflicted with the FOREIGN KEY constraint "FK_UKC_Threads_VesselParticulars". The conflict occurred in database "UKC_ManagersDB", table "dbo.UKC_VesselParticulars", column 'VesselId'.
+The statement has been terminated.
+[5/6/2025 7:46:31 PM] [Table: Messages] The INSERT statement conflicted with the FOREIGN KEY constraint "FK_UKC_Messages_Threads". The conflict occurred in database "UKC_ManagersDB", table "dbo.UKC_Threads", column 'ThreadId'.
+The statement has been terminated.
+[5/6/2025 8:05:12 PM] [Table: Messages] The INSERT statement conflicted with the FOREIGN KEY constraint "FK_UKC_Messages_Users". The conflict occurred in database "UKC_ManagersDB", table "dbo.UKC_Users", column 'UserId'.
+The statement has been terminated.
+[5/6/2025 8:08:27 PM] [Table: Threads] Unable to cast object of type 'System.Guid' to type 'System.String'.
+[5/6/2025 8:11:09 PM] [Table: Messages] Unable to cast object of type 'System.Guid' to type 'System.String'.

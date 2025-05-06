@@ -1,0 +1,37 @@
+[5/3/2025 9:37:59 PM] [Table: HydrostaticTable] A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: SQL Network Interfaces, error: 26 - Error Locating Server/Instance Specified)
+[5/3/2025 9:40:14 PM] [Table: HydrostaticTable] SQLite Error 1: 'no such table: HydrostaticTable'.
+[5/3/2025 9:44:11 PM] [Table: HydrostaticTable] SQLite Error 1: 'no such table: HydrostaticTable'.
+[5/3/2025 9:45:11 PM] [Table: HydrostaticTable] Invalid object name 'HydrostaticTable'.
+[5/3/2025 9:49:12 PM] [Table: HydrostaticTable] Invalid object name 'HydrostaticTable'.
+[5/3/2025 9:50:20 PM] [Table: HydrostaticTable] Conversion failed when converting from a character string to uniqueidentifier.
+[5/6/2025 10:44:58 AM] [Table: HydrostaticTable] Conversion failed when converting from a character string to uniqueidentifier.
+[5/6/2025 10:46:53 AM] [Table: VesselParticulars] Invalid column name 'VesselDanaosId'.
+[5/6/2025 10:47:50 AM] [Table: Threads] Incorrect syntax near the keyword 'VALUES'.
+[5/6/2025 5:37:11 PM] [Table: HydrostaticTable] Unable to cast object of type 'System.Guid' to type 'System.String'.
+[5/6/2025 5:37:11 PM] [Table: VesselParticulars] Invalid column name 'VesselDanaosId'.
+[5/6/2025 5:37:11 PM] [Table: Threads] The INSERT statement conflicted with the FOREIGN KEY constraint "FK_UKC_Threads_VesselParticulars". The conflict occurred in database "UKC_ManagersDB", table "dbo.UKC_VesselParticulars", column 'VesselId'.
+The statement has been terminated.
+[5/6/2025 5:37:11 PM] [Table: Messages] The INSERT statement conflicted with the FOREIGN KEY constraint "FK_UKC_Messages_Threads". The conflict occurred in database "UKC_ManagersDB", table "dbo.UKC_Threads", column 'ThreadId'.
+The statement has been terminated.
+[5/6/2025 5:38:52 PM] [Table: HydrostaticTable] Unable to cast object of type 'System.Guid' to type 'System.String'.
+[5/6/2025 5:38:52 PM] [Table: VesselParticulars] Invalid column name 'VesselDanaosId'.
+[5/6/2025 5:38:52 PM] [Table: Threads] The INSERT statement conflicted with the FOREIGN KEY constraint "FK_UKC_Threads_VesselParticulars". The conflict occurred in database "UKC_ManagersDB", table "dbo.UKC_VesselParticulars", column 'VesselId'.
+The statement has been terminated.
+[5/6/2025 5:38:52 PM] [Table: Messages] The INSERT statement conflicted with the FOREIGN KEY constraint "FK_UKC_Messages_Threads". The conflict occurred in database "UKC_ManagersDB", table "dbo.UKC_Threads", column 'ThreadId'.
+The statement has been terminated.
+[5/6/2025 6:53:05 PM] [Table: HydrostaticTable] Unable to cast object of type 'System.Guid' to type 'System.String'.
+[5/6/2025 6:53:05 PM] [Table: VesselParticulars] Invalid column name 'VesselDanaosId'.
+[5/6/2025 7:04:26 PM] [Table: HydrostaticTable] Unable to cast object of type 'System.Guid' to type 'System.String'.
+[5/6/2025 7:04:27 PM] [Table: Threads] The INSERT statement conflicted with the FOREIGN KEY constraint "FK_UKC_Threads_VesselParticulars". The conflict occurred in database "UKC_ManagersDB", table "dbo.UKC_VesselParticulars", column 'VesselId'.
+The statement has been terminated.
+[5/6/2025 7:04:27 PM] [Table: Messages] The INSERT statement conflicted with the FOREIGN KEY constraint "FK_UKC_Messages_Threads". The conflict occurred in database "UKC_ManagersDB", table "dbo.UKC_Threads", column 'ThreadId'.
+The statement has been terminated.
+[5/6/2025 7:48:19 PM] [Table: VesselParticulars] SQLite Error 1: 'no such column: VesselDanaosId'.
+[5/6/2025 7:48:19 PM] [Table: Threads] The INSERT statement conflicted with the FOREIGN KEY constraint "FK_UKC_Threads_VesselParticulars". The conflict occurred in database "UKC_ManagersDB", table "dbo.UKC_VesselParticulars", column 'VesselId'.
+The statement has been terminated.
+[5/6/2025 7:48:19 PM] [Table: Messages] The INSERT statement conflicted with the FOREIGN KEY constraint "FK_UKC_Messages_Threads". The conflict occurred in database "UKC_ManagersDB", table "dbo.UKC_Threads", column 'ThreadId'.
+The statement has been terminated.
+[5/6/2025 7:49:13 PM] [Table: Threads] The INSERT statement conflicted with the FOREIGN KEY constraint "FK_UKC_Threads_VesselParticulars". The conflict occurred in database "UKC_ManagersDB", table "dbo.UKC_VesselParticulars", column 'VesselId'.
+The statement has been terminated.
+[5/6/2025 7:49:13 PM] [Table: Messages] The INSERT statement conflicted with the FOREIGN KEY constraint "FK_UKC_Messages_Threads". The conflict occurred in database "UKC_ManagersDB", table "dbo.UKC_Threads", column 'ThreadId'.
+The statement has been terminated.
