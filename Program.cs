@@ -56,47 +56,47 @@ class Program
             LogError(errorMsg);
         }
     }
-/*
-    static void CreateNewDatabase()
-    {
-        Console.WriteLine("Enter a new SQLite Database name (e.g., CoupaVessel.db):");
-        string dbName = Console.ReadLine();
-
-        try
+    /* // To create the new database with required tables
+        static void CreateNewDatabase()
         {
-            //To Ensure it ends with .db
-            if (!dbName.EndsWith(".db", StringComparison.OrdinalIgnoreCase))
+            Console.WriteLine("Enter a new SQLite Database name (e.g., CoupaVessel.db):");
+            string dbName = Console.ReadLine();
+
+            try
             {
-                dbName += ".db";
+                //To Ensure it ends with .db
+                if (!dbName.EndsWith(".db", StringComparison.OrdinalIgnoreCase))
+                {
+                    dbName += ".db";
+                }
+
+                // To create direction into Databases Folder
+                string relativePath = Path.Combine("Databases", dbName);
+                string fullPath = Path.Combine(Directory.GetCurrentDirectory(), relativePath);
+
+                // Create if not exists
+                Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
+
+                if (File.Exists(fullPath))
+                {
+                    Console.WriteLine($"Database '{dbName}' already exists at: {fullPath}");
+                }
+                else
+                {
+                    DbInitializer.CreateDatabaseWithTabels(fullPath);
+                    Console.WriteLine($"Database '{dbName}' created successfully with required tables.");
+                }
+
+                Console.WriteLine("Done.");
             }
-
-            // To create direction into Databases Folder
-            string relativePath = Path.Combine("Databases", dbName);
-            string fullPath = Path.Combine(Directory.GetCurrentDirectory(), relativePath);
-
-            // Create if not exists
-            Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
-
-            if (File.Exists(fullPath))
+            catch (Exception ex)
             {
-                Console.WriteLine($"Database '{dbName}' already exists at: {fullPath}");
+                string errorMsg = $"Error during database creation: {ex.Message}";
+                Console.WriteLine(errorMsg);
+                LogError(errorMsg);
             }
-            else
-            {
-                DbInitializer.CreateDatabaseWithTabels(fullPath);
-                Console.WriteLine($"Database '{dbName}' created successfully with required tables.");
-            }
-
-            Console.WriteLine("Done.");
         }
-        catch (Exception ex)
-        {
-            string errorMsg = $"Error during database creation: {ex.Message}";
-            Console.WriteLine(errorMsg);
-            LogError(errorMsg);
-        }
-    }
-*/
+    */
     static void SyncHydrostaticTable()
     {
         Console.WriteLine("Start Syncing...");
@@ -199,24 +199,6 @@ class Program
         }
     }
 
-    static void SyncMessagesTableForBothDatabases()
-    {
-        Console.WriteLine("Start Syncing...");
-
-        try
-        {
-            var messagesSync = new MessagesSyncService(config);
-            messagesSync.SyncMessagesFromSQLiteToSQLServer();
-            messagesSync.SyncMessagesFromSQLServerToSQLite();
-        }
-        catch (Exception ex)
-        {
-            string errorMsg = $"Failed synchronized from Messages table to SQL Server: {ex.Message}";
-            Console.WriteLine(errorMsg);
-            LogError(errorMsg);
-        }
-    }
-
     static void SyncChangeLogTableFromSQLServerToSQLite()
     {
         Console.WriteLine("Start Syncing...");
@@ -241,24 +223,6 @@ class Program
         try
         {
             var changeLogSync = new ChangeLogSyncService(config);
-            changeLogSync.SyncChangeLogFromSQLiteToSqlServer();
-        }
-        catch (Exception ex)
-        {
-            string errorMsg = $"Failed synchronized from Messages table to SQL Server: {ex.Message}";
-            Console.WriteLine(errorMsg);
-            LogError(errorMsg);
-        }
-    }
-
-    static void SyncChangeLogTableForBothDatabases()
-    {
-        Console.WriteLine("Start Syncing...");
-
-        try
-        {
-            var changeLogSync = new ChangeLogSyncService(config);
-            changeLogSync.SyncChangeLogFromSQLServerToSqlite();
             changeLogSync.SyncChangeLogFromSQLiteToSqlServer();
         }
         catch (Exception ex)
