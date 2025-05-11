@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("UKC Syncornization App")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ae84806389b76b50026b0679a8653c3bc91751b8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+29633af54beb5ba3de8be78cfff38e79aa923b67")]
 [assembly: System.Reflection.AssemblyProductAttribute("UKC Syncornization App")]
 [assembly: System.Reflection.AssemblyTitleAttribute("UKC Syncornization App")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

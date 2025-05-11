@@ -9,30 +9,24 @@ namespace Services
 {
     public class ChangeLogSyncService
     {
-        private readonly string? _sqliteConn;
-        private readonly string? _sqlServerConn;
-
-        public ChangeLogSyncService(IConfiguration config)
-        {
-            _sqliteConn = config.GetConnectionString("SQLiteDatabases");
-            _sqlServerConn = config.GetConnectionString("SqlServer");
-        }
-
-        public void SyncChangeLogFromSQLServerToSqlite()
+        public void SyncChangeLogFromSQLServerToSqlite(string vesselId, SqliteConnection sqlite, SqlConnection sqlServer)
         {
             try
             {
-                using var sqlite = new SqliteConnection(_sqliteConn);
-                using var sqlServer = new SqlConnection(_sqlServerConn);
-
-                sqlite.Open();
-                sqlServer.Open();
-
                 string selectSql = @"
-                    SELECT QueryId, QueryText, VesselId, Timestamp, Owner, IsSynced, IsProcessed
-                    FROM UKC_ChangeLog";
+                    SELECT QueryId
+                        ,QueryText
+                        ,VesselId
+                        ,Timestamp
+                        ,Owner
+                        ,IsSynced
+                        ,IsProcessed
+                    FROM UKC_ChangeLog
+                    WHERE VesselId = @VesselId
+                    ";
 
                 using var selectCmd = new SqlCommand(selectSql, sqlServer);
+                selectCmd.Parameters.AddWithValue("@VesselId", vesselId);
                 using var reader = selectCmd.ExecuteReader();
 
                 int insertedCount = 0;
@@ -50,9 +44,24 @@ namespace Services
                     {
                         string insertSql = @"
                             INSERT INTO ChangeLog (
-                                QueryId, QueryText, VesselId, Timestamp, Owner, IsSynced, IsProcessed)
+                                QueryId
+                                ,QueryText
+                                ,VesselId
+                                ,Timestamp
+                                ,Owner
+                                ,IsSynced
+                                ,IsProcessed
+                                )
                             VALUES (
-                                @QueryId, @QueryText, @VesselId, @Timestamp, @Owner, @IsSynced, @IsProcessed)";
+                                @QueryId
+                                ,@QueryText
+                                ,@VesselId
+                                ,@Timestamp
+                                ,@Owner
+                                ,@IsSynced
+                                ,@IsProcessed
+                                )
+                            ";
 
                         using var insertCmd = new SqliteCommand(insertSql, sqlite);
                         AddParemeters(insertCmd, reader);
@@ -62,14 +71,15 @@ namespace Services
                     else
                     {
                         string updateSql = @"
-                            Update ChangeLog SET
-                                QueryText = @QueryText, 
-                                VesselId = @VesselId, 
-                                Timestamp = @Timestamp, 
-                                Owner = @Owner, 
-                                IsSynced = @IsSynced, 
-                                IsProcessed = @IsProcessed
-                            WHERE QueryId = @QueryId";
+                            UPDATE ChangeLog
+                            SET QueryText = @QueryText
+                                ,VesselId = @VesselId
+                                ,Timestamp = @Timestamp
+                                ,Owner = @Owner
+                                ,IsSynced = @IsSynced
+                                ,IsProcessed = @IsProcessed
+                            WHERE QueryId = @QueryId
+                            ";
 
                         using var updateCmd = new SqliteCommand(updateSql, sqlite);
                         AddParemeters(updateCmd, reader);
@@ -81,24 +91,25 @@ namespace Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error syncing Threads: {ex.Message}");
-                LogError("Threads", ex.Message);
+                Console.WriteLine($"Error syncing ChangeLog: {ex.Message}");
+                LogError("ChangeLog", ex.Message);
             }
         }
 
-        public void SyncChangeLogFromSQLiteToSqlServer()
+        public void SyncChangeLogFromSQLiteToSqlServer(SqliteConnection sqlite, SqlConnection sqlServer)
         {
             try
             {
-                using var sqlite = new SqliteConnection(_sqliteConn);
-                using var sqlServer = new SqlConnection(_sqlServerConn);
-
-                sqlite.Open();
-                sqlServer.Open();
-
                 string selectSql = @"
-                    SELECT QueryId, QueryText, VesselId, Timestamp, Owner, IsSynced, IsProcessed
-                    FROM ChangeLog";
+                    SELECT QueryId
+                    ,QueryText
+                    ,VesselId
+                    ,Timestamp
+                    ,Owner
+                    ,IsSynced
+                    ,IsProcessed
+                FROM ChangeLog
+                ";
 
                 using var selectCmd = new SqliteCommand(selectSql, sqlite);
                 using var reader = selectCmd.ExecuteReader();
@@ -118,9 +129,24 @@ namespace Services
                     {
                         string insertSql = @"
                             INSERT INTO UKC_ChangeLog (
-                                QueryId, QueryText, VesselId, Timestamp, Owner, IsSynced, IsProcessed)
+                                QueryId
+                                ,QueryText
+                                ,VesselId
+                                ,Timestamp
+                                ,Owner
+                                ,IsSynced
+                                ,IsProcessed
+                                )
                             VALUES (
-                                @QueryId, @QueryText, @VesselId, @Timestamp, @Owner, @IsSynced, @IsProcessed)";
+                                @QueryId
+                                ,@QueryText
+                                ,@VesselId
+                                ,@Timestamp
+                                ,@Owner
+                                ,@IsSynced
+                                ,@IsProcessed
+                                )
+                            ";
 
                         using var insertCmd = new SqlCommand(insertSql, sqlServer);
                         AddParemeters(insertCmd, reader);
@@ -130,14 +156,15 @@ namespace Services
                     else
                     {
                         string updateSql = @"
-                            Update UKC_ChangeLog SET
-                                QueryText = @QueryText, 
-                                VesselId = @VesselId, 
-                                Timestamp = @Timestamp, 
-                                Owner = @Owner, 
-                                IsSynced = @IsSynced, 
-                                IsProcessed = @IsProcessed
-                            WHERE QueryId = @QueryId";
+                            UPDATE UKC_ChangeLog
+                            SET QueryText = @QueryText
+                                ,VesselId = @VesselId
+                                ,Timestamp = @Timestamp
+                                ,Owner = @Owner 
+                                ,IsSynced = @IsSynced
+                                ,IsProcessed = @IsProcessed
+                            WHERE QueryId = @QueryId
+                            ";
 
                         using var updateCmd = new SqlCommand(updateSql, sqlServer);
                         AddParemeters(updateCmd, reader);
@@ -149,8 +176,8 @@ namespace Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error syncing Threads: {ex.Message}");
-                LogError("Threads", ex.Message);
+                Console.WriteLine($"Error syncing ChangeLog: {ex.Message}");
+                LogError("ChangeLog", ex.Message);
             }
         }
 

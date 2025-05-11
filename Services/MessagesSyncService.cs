@@ -9,30 +9,26 @@ namespace Services
 {
     public class MessagesSyncService
     {
-        private readonly string? _sqliteConn;
-        private readonly string? _sqlServerConn;
-
-        public MessagesSyncService(IConfiguration config)
-        {
-            _sqliteConn = config.GetConnectionString("SQLiteDatabases");
-            _sqlServerConn = config.GetConnectionString("SqlServer");
-        }
-
-        public void SyncMessagesFromSQLServerToSQLite()
+        public void SyncMessagesFromSQLServerToSQLite(string threadId, SqliteConnection sqlite, SqlConnection sqlServer)
         {
             try
             {
-                using var sqlite = new SqliteConnection(_sqliteConn);
-                using var sqlServer = new SqlConnection(_sqlServerConn);
-
-                sqlite.Open();
-                sqlServer.Open();
-
                 string selectSql = @"
-                    SELECT MessageId, ThreadId, UserId, ExternalUser, MessageType, CalculationData, Comments, IsSynced, CreatedAt
-                    FROM UKC_Messages";
+                    SELECT MessageId
+                        ,ThreadId
+                        ,UserId
+                        ,ExternalUser
+                        ,MessageType
+                        ,CalculationData
+                        ,Comments
+                        ,IsSynced
+                        ,CreatedAt
+                    FROM UKC_Messages
+                    WHERE ThreadId = @ThreadId
+                    ";
 
                 using var selectCmd = new SqlCommand(selectSql, sqlServer);
+                selectCmd.Parameters.AddWithValue("@ThreadId", threadId);
                 using var reader = selectCmd.ExecuteReader();
 
                 int insertedCount = 0;
@@ -50,9 +46,28 @@ namespace Services
                     {
                         string insertSql = @"
                             INSERT INTO Messages (
-                                MessageId, ThreadId, UserId, ExternalUser, MessageType, CalculationData, Comments, IsSynced, CreatedAt)
+                                MessageId
+                                ,ThreadId
+                                ,UserId
+                                ,ExternalUser
+                                ,MessageType
+                                ,CalculationData
+                                ,Comments
+                                ,IsSynced
+                                ,CreatedAt
+                                )
                             VALUES (
-                                @MessageId, @ThreadId, @UserId, @ExternalUser, @MessageType, @CalculationData, @Comments, @IsSynced, @CreatedAt)";
+                                @MessageId
+                                ,@ThreadId
+                                ,@UserId
+                                ,@ExternalUser
+                                ,@MessageType
+                                ,@CalculationData
+                                ,@Comments
+                                ,@IsSynced
+                                ,@CreatedAt
+                                )
+                            ";
 
                         using var insertCmd = new SqliteCommand(insertSql, sqlite);
                         AddParemeters(insertCmd, reader);
@@ -62,16 +77,17 @@ namespace Services
                     else
                     {
                         string updateSql = @"
-                            Update Messages SET
-                                ThreadId = @ThreadId, 
-                                UserId = @UserId, 
-                                ExternalUser = @ExternalUser, 
-                                MessageType = @MessageType, 
-                                CalculationData = @CalculationData, 
-                                Comments = @Comments,
-                                IsSynced = @IsSynced,
-                                CreatedAt = @CreatedAt
-                            WHERE MessageId = @MessageId";
+                            UPDATE Messages
+                            SET ThreadId = @ThreadId
+                                ,UserId = @UserId
+                                ,ExternalUser = @ExternalUser
+                                ,MessageType = @MessageType
+                                ,CalculationData = @CalculationData
+                                ,Comments = @Comments
+                                ,IsSynced = @IsSynced
+                                ,CreatedAt = @CreatedAt
+                            WHERE MessageId = @MessageId
+                            ";
 
                         using var updateCmd = new SqliteCommand(updateSql, sqlite);
                         AddParemeters(updateCmd, reader);
@@ -88,19 +104,22 @@ namespace Services
             }
         }
 
-        public void SyncMessagesFromSQLiteToSQLServer()
+        public void SyncMessagesFromSQLiteToSQLServer(SqliteConnection sqlite, SqlConnection sqlServer)
         {
             try
             {
-                using var sqlite = new SqliteConnection(_sqliteConn);
-                using var sqlServer = new SqlConnection(_sqlServerConn);
-
-                sqlite.Open();
-                sqlServer.Open();
-
                 string selectSqlite = @"
-                    SELECT MessageId, ThreadId, UserId, ExternalUser, MessageType, CalculationData, Comments, IsSynced, CreatedAt
-                    FROM Messages";
+                    SELECT MessageId
+                        ,ThreadId
+                        ,UserId
+                        ,ExternalUser
+                        ,MessageType
+                        ,CalculationData
+                        ,Comments
+                        ,IsSynced
+                        ,CreatedAt
+                    FROM Messages
+                    ";
 
                 using var selectCmd = new SqliteCommand(selectSqlite, sqlite);
                 using var reader = selectCmd.ExecuteReader();
@@ -109,7 +128,7 @@ namespace Services
 
                 while (reader.Read())
                 {
-                    string messageId = reader.GetString(0);
+                    string messageId = reader.GetGuid(0).ToString();
                     string checkSql = "SELECT COUNT(*) FROM UKC_Messages WHERE MessageId = @MessageId";
                     using var checkCmd = new SqlCommand(checkSql, sqlServer);
                     checkCmd.Parameters.AddWithValue("@MessageId", messageId);
@@ -120,9 +139,28 @@ namespace Services
                     {
                         string insertSql = @"
                             INSERT INTO UKC_Messages (
-                                MessageId, ThreadId, UserId, ExternalUser, MessageType, CalculationData, Comments, IsSynced, CreatedAt)
+                                MessageId
+                                ,ThreadId
+                                ,UserId
+                                ,ExternalUser
+                                ,MessageType
+                                ,CalculationData
+                                ,Comments
+                                ,IsSynced
+                                ,CreatedAt
+                                )
                             VALUES (
-                                @MessageId, @ThreadId, @UserId, @ExternalUser, @MessageType, @CalculationData, @Comments, @IsSynced, @CreatedAt)";
+                                @MessageId
+                                ,@ThreadId
+                                ,@UserId
+                                ,@ExternalUser
+                                ,@MessageType
+                                ,@CalculationData
+                                ,@Comments
+                                ,@IsSynced
+                                ,@CreatedAt
+                                )
+                            ";
 
                         using var insertCmd = new SqlCommand(insertSql, sqlServer);
                         AddParemeters(insertCmd, reader);
@@ -132,16 +170,17 @@ namespace Services
                     else
                     {
                         string updateSql = @"
-                            Update UKC_Messages SET
-                                ThreadId = @ThreadId, 
-                                UserId = @UserId, 
-                                ExternalUser = @ExternalUser, 
-                                MessageType = @MessageType, 
-                                CalculationData = @CalculationData, 
-                                Comments = @Comments,
-                                IsSynced = @IsSynced,
-                                CreatedAt = @CreatedAt
-                            WHERE MessageId = @MessageId";
+                            UPDATE UKC_Messages
+                            SET ThreadId = @ThreadId
+                                ,UserId = @UserId
+                                ,ExternalUser = @ExternalUser
+                                ,MessageType = @MessageType
+                                ,CalculationData = @CalculationData
+                                ,Comments = @Comments
+                                ,IsSynced = @IsSynced
+                                ,CreatedAt = @CreatedAt
+                            WHERE MessageId = @MessageId
+                            ";
 
                         using var updateCmd = new SqlCommand(updateSql, sqlServer);
                         AddParemeters(updateCmd, reader);

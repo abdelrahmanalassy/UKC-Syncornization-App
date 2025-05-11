@@ -9,30 +9,17 @@ namespace Services
 {
     public class ThreadsSyncService
     {
-        private readonly string? _sqliteConn;
-        private readonly string? _sqlServerConn;
-
-        public ThreadsSyncService(IConfiguration config)
-        {
-            _sqliteConn = config.GetConnectionString("SQLiteDatabases");
-            _sqlServerConn = config.GetConnectionString("SqlServer");
-        }
-
-        public void SyncThreadsFromSQLServerToSqlite()
+        public void SyncThreadsFromSQLServerToSqlite(string vesselId, SqliteConnection sqlite, SqlConnection sqlServer)
         {
             try
             {
-                using var sqlite = new SqliteConnection(_sqliteConn);
-                using var sqlServer = new SqlConnection(_sqlServerConn);
-
-                sqlite.Open();
-                sqlServer.Open();
-
                 string selectSql = @"
                     SELECT ThreadId, Status, IsSynced, PortID, CreatedAt, UpdatedAt, VesselId
-                    FROM UKC_Threads";
+                    FROM UKC_Threads
+                    WHERE VesselId = @VesselId";
 
                 using var selectCmd = new SqlCommand(selectSql, sqlServer);
+                selectCmd.Parameters.AddWithValue("@VesselId", vesselId);
                 using var reader = selectCmd.ExecuteReader();
 
                 int insertedCount = 0;
@@ -50,9 +37,24 @@ namespace Services
                     {
                         string insertSql = @"
                             INSERT INTO Threads (
-                                ThreadId, Status, IsSynced, PortID, CreatedAt, UpdatedAt, VesselId)
+                                ThreadId
+                                ,STATUS
+                                ,IsSynced
+                                ,PortID
+                                ,CreatedAt
+                                ,UpdatedAt
+                                ,VesselId
+                                )
                             VALUES (
-                                @ThreadId, @Status, @IsSynced, @PortID, @CreatedAt, @UpdatedAt, @VesselId)";
+                                @ThreadId
+                                ,@Status
+                                ,@IsSynced
+                                ,@PortID
+                                ,@CreatedAt
+                                ,@UpdatedAt
+                                ,@VesselId
+                                )
+                            ";
 
                         using var insertCmd = new SqliteCommand(insertSql, sqlite);
                         AddParemeters(insertCmd, reader);
@@ -62,17 +64,17 @@ namespace Services
                     else
                     {
                         string updateSql = @"
-                            Update Threads SET
-                                Status = @Status, 
-                                IsSynced = @IsSynced, 
-                                PortID = @PortID, 
-                                CreatedAt = @CreatedAt, 
-                                UpdatedAt = @UpdatedAt, 
-                                VesselId = @VesselId
-                            WHERE ThreadId = @ThreadId";
+                            UPDATE Threads
+                            SET STATUS = @Status
+                                ,IsSynced = @IsSynced
+                                ,PortID = @PortID
+                                ,CreatedAt = @CreatedAt
+                                ,UpdatedAt = @UpdatedAt
+                            WHERE VesselId = @VesselId
+                            ";
 
                         using var updateCmd = new SqliteCommand(updateSql, sqlite);
-                        AddParemeters(updateCmd, reader);
+                        AddParemeters(updateCmd, reader);                     
                         updateCmd.ExecuteNonQuery();
                     }
                 }
@@ -86,15 +88,10 @@ namespace Services
             }
         }
 
-        public void SyncThreadsFromSQLiteToSqlServer()
+        public void SyncThreadsFromSQLiteToSqlServer(SqliteConnection sqlite, SqlConnection sqlServer)
         {
             try
             {
-                using var sqlite = new SqliteConnection(_sqliteConn);
-                using var sqlServer = new SqlConnection(_sqlServerConn);
-
-                sqlite.Open();
-                sqlServer.Open();
 
                 string selectSqlite = @"
                     SELECT ThreadId, Status, IsSynced, PortID, CreatedAt, UpdatedAt, VesselId
@@ -118,9 +115,24 @@ namespace Services
                     {
                         string insertSql = @"
                             INSERT INTO UKC_Threads (
-                                ThreadId, Status, IsSynced, PortID, CreatedAt, UpdatedAt, VesselId)
+                                ThreadId
+                                ,STATUS
+                                ,IsSynced
+                                ,PortID
+                                ,CreatedAt
+                                ,UpdatedAt
+                                ,VesselId
+                                )
                             VALUES (
-                                @ThreadId, @Status, @IsSynced, @PortID, @CreatedAt, @UpdatedAt, @VesselId)";
+                                @ThreadId
+                                ,@Status
+                                ,@IsSynced
+                                ,@PortID
+                                ,@CreatedAt
+                                ,@UpdatedAt
+                                ,@VesselId
+                                )
+                            ";
 
                         using var insertCmd = new SqlCommand(insertSql, sqlServer);
                         AddParemeters(insertCmd, reader);
@@ -130,14 +142,15 @@ namespace Services
                     else
                     {
                         string updateSql = @"
-                            Update UKC_Threads SET
-                                Status = @Status, 
-                                IsSynced = @IsSynced, 
-                                PortID = @PortID, 
-                                CreatedAt = @CreatedAt, 
-                                UpdatedAt = @UpdatedAt, 
-                                VesselId = @VesselId
-                            WHERE ThreadId = @ThreadId";
+                            UPDATE UKC_Threads
+                            SET STATUS = @Status
+                                ,IsSynced = @IsSynced
+                                ,PortID = @PortID
+                                ,CreatedAt = @CreatedAt
+                                ,UpdatedAt = @UpdatedAt
+                                ,VesselId = @VesselId
+                            WHERE ThreadId = @ThreadId
+                            ";
 
                         using var updateCmd = new SqlCommand(updateSql, sqlServer);
                         AddParemeters(updateCmd, reader);

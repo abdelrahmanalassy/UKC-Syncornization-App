@@ -35,3 +35,95 @@ The statement has been terminated.
 The statement has been terminated.
 [5/6/2025 7:49:13 PM] [Table: Messages] The INSERT statement conflicted with the FOREIGN KEY constraint "FK_UKC_Messages_Threads". The conflict occurred in database "UKC_ManagersDB", table "dbo.UKC_Threads", column 'ThreadId'.
 The statement has been terminated.
+[5/9/2025 6:48:28 PM] [Table: HydrostaticTable] Must declare the scalar variable "@VesselId".
+[5/9/2025 6:48:28 PM] [Table: VesselParticulars] Must declare the scalar variable "@VesselId".
+[5/9/2025 6:48:28 PM] [Table: Threads] Must declare the scalar variable "@VesselId".
+[5/9/2025 6:48:28 PM] [Table: Messages] Must declare the scalar variable "@ThreadId".
+[5/9/2025 6:48:28 PM] [Table: Threads] Must add values for the following parameters: @Timestamp, @Owner
+[5/10/2025 8:09:51 PM] [Table: HydrostaticTable] Must declare the scalar variable "@VesselId".
+[5/10/2025 8:09:51 PM] [Table: VesselParticulars] Must declare the scalar variable "@VesselId".
+[5/10/2025 8:09:51 PM] [Table: Threads] Must declare the scalar variable "@VesselId".
+[5/10/2025 8:09:51 PM] [Table: Messages] Must declare the scalar variable "@ThreadId".
+[5/10/2025 8:09:51 PM] [Table: Threads] Must add values for the following parameters: @Timestamp, @Owner
+[5/10/2025 8:13:03 PM] [Table: HydrostaticTable] Must declare the scalar variable "@VesselId".
+[5/10/2025 8:13:03 PM] [Table: VesselParticulars] Must declare the scalar variable "@VesselId".
+[5/10/2025 8:13:03 PM] [Table: Threads] Must declare the scalar variable "@VesselId".
+[5/10/2025 8:13:03 PM] [Table: Messages] Must declare the scalar variable "@ThreadId".
+[5/10/2025 8:13:03 PM] [Table: Threads] Must add values for the following parameters: @Timestamp, @Owner
+[5/10/2025 8:15:06 PM] [Table: HydrostaticTable] Must declare the scalar variable "@VesselId".
+[5/10/2025 8:15:06 PM] [Table: VesselParticulars] Must declare the scalar variable "@VesselId".
+[5/10/2025 8:15:06 PM] [Table: Threads] Must declare the scalar variable "@VesselId".
+[5/10/2025 8:15:06 PM] [Table: Messages] Must declare the scalar variable "@ThreadId".
+[5/10/2025 8:15:07 PM] [Table: Threads] Must add values for the following parameters: @Timestamp, @Owner
+[5/10/2025 8:22:00 PM] [Table: VesselParticulars] Must declare the scalar variable "@VesselId".
+[5/10/2025 8:22:00 PM] [Table: Threads] Must declare the scalar variable "@VesselId".
+[5/10/2025 8:22:01 PM] [Table: Messages] Must declare the scalar variable "@ThreadId".
+[5/10/2025 8:22:01 PM] [Table: Threads] Must add values for the following parameters: @Timestamp, @Owner
+[5/10/2025 8:25:19 PM] [Table: Threads] Must declare the scalar variable "@VesselId".
+[5/10/2025 8:25:19 PM] [Table: Messages] Must declare the scalar variable "@ThreadId".
+[5/10/2025 8:25:19 PM] [Table: Threads] Must add values for the following parameters: @Timestamp, @Owner
+[5/10/2025 8:28:54 PM] [Table: Messages] Must declare the scalar variable "@ThreadId".
+[5/10/2025 8:28:54 PM] [Table: Threads] Must add values for the following parameters: @Timestamp, @Owner
+[5/10/2025 8:31:29 PM] [Table: Messages] Conversion failed when converting from a character string to uniqueidentifier.
+[5/10/2025 8:31:29 PM] [Table: Threads] Must add values for the following parameters: @Timestamp, @Owner
+[5/10/2025 8:32:03 PM] [Table: Messages] Conversion failed when converting from a character string to uniqueidentifier.
+[5/10/2025 8:32:03 PM] [Table: Threads] Must add values for the following parameters: @Timestamp, @Owner
+[5/10/2025 8:36:17 PM] [Table: Messages] Conversion failed when converting from a character string to uniqueidentifier.
+[5/10/2025 8:36:17 PM] [Table: Threads] Must add values for the following parameters: @Timestamp, @Owner
+[5/10/2025 8:38:29 PM] [Table: Messages] Conversion failed when converting from a character string to uniqueidentifier.
+[5/10/2025 8:38:29 PM] [Table: Threads] Must add values for the following parameters: @Timestamp, @Owner
+[5/10/2025 8:39:25 PM] [Table: Messages] Conversion failed when converting from a character string to uniqueidentifier.
+[5/10/2025 8:39:25 PM] [Table: Threads] Must add values for the following parameters: @Timestamp, @Owner
+[5/10/2025 8:39:56 PM] [Table: Messages] Conversion failed when converting from a character string to uniqueidentifier.
+[5/10/2025 8:39:57 PM] [Table: Threads] Must add values for the following parameters: @Timestamp, @Owner
+[5/10/2025 8:51:03 PM] [Table: Messages] Conversion failed when converting from a character string to uniqueidentifier.
+[5/10/2025 8:51:03 PM] [Table: Threads] Must add values for the following parameters: @Timestamp, @Owner
+[5/10/2025 10:28:29 PM] [Table: VesselParticulars] Must declare the scalar variable "@VesselId".
+[5/10/2025 10:28:29 PM] [Table: HydrostaticTable] SQLite Error 1: 'no such table: HydrostaticTable'.
+[5/10/2025 10:28:29 PM] [Table: Threads] There is already an open DataReader associated with this Connection which must be closed first.
+[5/10/2025 10:28:29 PM] [Table: Threads] SQLite Error 1: 'no such table: Threads'.
+[5/10/2025 10:28:29 PM] [Table: Messages] There is already an open DataReader associated with this Connection which must be closed first.
+[5/10/2025 10:28:29 PM] [Table: Messages] SQLite Error 1: 'no such table: Messages'.
+[5/10/2025 10:28:29 PM] [Table: Threads] There is already an open DataReader associated with this Connection which must be closed first.
+[5/10/2025 10:28:29 PM] [Table: Threads] SQLite Error 1: 'no such table: ChangeLog'.
+[5/10/2025 10:34:44 PM] [Table: VesselParticulars] Must declare the scalar variable "@VesselId".
+[5/10/2025 10:34:44 PM] [Table: HydrostaticTable] SQLite Error 1: 'no such table: HydrostaticTable'.
+[5/10/2025 10:34:45 PM] [Table: Threads] SQLite Error 1: 'no such table: Threads'.
+[5/10/2025 10:34:45 PM] [Table: Threads] SQLite Error 1: 'no such table: Threads'.
+[5/10/2025 10:34:45 PM] [Table: Messages] Must declare the scalar variable "@ThreadId".
+[5/10/2025 10:34:45 PM] [Table: Messages] SQLite Error 1: 'no such table: Messages'.
+[5/10/2025 10:34:45 PM] [Table: Threads] SQLite Error 1: 'no such table: ChangeLog'.
+[5/10/2025 10:34:45 PM] [Table: Threads] SQLite Error 1: 'no such table: ChangeLog'.
+[5/10/2025 10:47:43 PM] [Table: VesselParticulars] SQLite Error 1: 'no such table: VesselParticulars'.
+[5/10/2025 10:47:43 PM] [Table: HydrostaticTable] SQLite Error 1: 'no such table: HydrostaticTable'.
+[5/10/2025 10:47:43 PM] [Table: Threads] SQLite Error 1: 'no such table: Threads'.
+[5/10/2025 10:47:43 PM] [Table: Threads] SQLite Error 1: 'no such table: Threads'.
+[5/10/2025 10:47:43 PM] [Table: Messages] Must declare the scalar variable "@ThreadId".
+[5/10/2025 10:47:43 PM] [Table: Messages] SQLite Error 1: 'no such table: Messages'.
+[5/10/2025 10:47:43 PM] [Table: Threads] SQLite Error 1: 'no such table: ChangeLog'.
+[5/10/2025 10:47:43 PM] [Table: Threads] SQLite Error 1: 'no such table: ChangeLog'.
+[5/10/2025 10:52:08 PM] [Table: Threads] SQLite Error 1: 'near "WHERE": syntax error'.
+[5/10/2025 10:52:08 PM] [Table: Threads] The variable name '@ThreadId' has already been declared. Variable names must be unique within a query batch or stored procedure.
+[5/10/2025 10:52:08 PM] [Table: Messages] Must declare the scalar variable "@ThreadId".
+[5/10/2025 10:52:08 PM] [Table: Threads] Must add values for the following parameters: @Timestamp, @Owner
+[5/10/2025 10:59:05 PM] [Table: Threads] SQLite Error 1: 'near "WHERE": syntax error'.
+[5/10/2025 10:59:05 PM] [Table: Messages] Must declare the scalar variable "@ThreadId".
+[5/10/2025 10:59:05 PM] [Table: Threads] Must add values for the following parameters: @Timestamp, @Owner
+[5/10/2025 11:03:11 PM] [Table: Messages] Must declare the scalar variable "@ThreadId".
+[5/10/2025 11:03:11 PM] [Table: Threads] Must add values for the following parameters: @Timestamp, @Owner
+[5/10/2025 11:04:10 PM] [Table: Messages] Must declare the scalar variable "@ThreadId".
+[5/10/2025 11:04:10 PM] [Table: Threads] Must add values for the following parameters: @Timestamp, @Owner
+[5/10/2025 11:10:03 PM] [Table: Messages] Conversion failed when converting from a character string to uniqueidentifier.
+[5/10/2025 11:10:03 PM] [Table: Threads] Must add values for the following parameters: @Timestamp, @Owner
+[5/10/2025 11:15:45 PM] [Table: Threads] Must add values for the following parameters: @Timestamp, @Owner
+[5/10/2025 11:18:10 PM] [Table: ChangeLog] Must add values for the following parameters: @Timestamp, @Owner
+[5/10/2025 11:22:36 PM] [Table: ChangeLog] Must add values for the following parameters: @Timestamp
+[5/11/2025 11:13:31 AM] [Table: VesselParticulars] SQLite Error 1: 'near "WHERE": syntax error'.
+[5/11/2025 11:13:31 AM] [Table: HydrostaticTable] SQLite Error 19: 'FOREIGN KEY constraint failed'.
+[5/11/2025 11:13:32 AM] [Table: Messages] Conversion failed when converting from a character string to uniqueidentifier.
+[5/11/2025 11:21:01 AM] [Table: Messages] Conversion failed when converting from a character string to uniqueidentifier.
+[5/11/2025 11:35:02 AM] [Table: VesselParticulars] SQLite Error 5: 'database is locked'.
+[5/11/2025 11:35:32 AM] [Table: HydrostaticTable] SQLite Error 5: 'database is locked'.
+[5/11/2025 11:35:32 AM] [Table: Messages] Conversion failed when converting from a character string to uniqueidentifier.
+[5/11/2025 11:39:03 AM] [Table: Messages] Conversion failed when converting from a character string to uniqueidentifier.
+[5/11/2025 11:44:37 AM] [Table: Messages] SQLite Error 19: 'FOREIGN KEY constraint failed'.

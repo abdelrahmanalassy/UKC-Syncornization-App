@@ -1,3 +1,4 @@
 [5/3/2025 7:34:20 PM] Error during database creation: SQLite Error 1: 'object name reserved for internal use: sqlite_sequence'.
 [5/3/2025 7:39:23 PM] Error during database creation: SQLite Error 1: 'object name reserved for internal use: sqlite_sequence'.
 [5/6/2025 6:51:04 PM] Error during database creation: SQLite Error 1: 'object name reserved for internal use: sqlite_sequence'.
+[5/11/2025 9:45:20 AM] Error during database creation: SQLite Error 1: 'object name reserved for internal use: sqlite_sequence'.

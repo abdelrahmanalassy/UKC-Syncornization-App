@@ -8,41 +8,54 @@ namespace Services
 {
     public class VesselParticularsSyncService
     {
-        private readonly string? _sqliteConn;
-        private readonly string? _sqlServerConn;
-
-        public VesselParticularsSyncService(IConfiguration config)
-        {
-            _sqliteConn = config.GetConnectionString("SQLiteDatabases");
-            _sqlServerConn = config.GetConnectionString("SqlServer");
-        }
-
-        public void Sync()
+        public void Sync(SqliteConnection sqlite, SqlConnection sqlServer, string vesselId)
         {
             try
             {
-                using var sqlite = new SqliteConnection(_sqliteConn);
-                using var sqlServer = new SqlConnection(_sqlServerConn);
-
-                sqlite.Open();
-                sqlServer.Open();
-
                 string selectSqlServer = @"
-                    SELECT VesselId, DanaosId, VesselType, VesselName, VesselSize, IsActive,
-                           IsConnected, DraftUnits, DraftIncrement, CbMode, MinDraft, MaxDraft,
-                           MinDraftDisplacement, MaxDraftDisplacement, LightShipWeight, LBP, LOA,
-                           Breadth, Depth, SummerDraft, SummerDisplacement, SummerDWT, FWA, TPC,
-                           KeelToMast, KeelToMastFolded, APToMast, MaxSpeed, CreatedAt, UpdatedAt
-                    FROM UKC_VesselParticulars";
+                    SELECT VesselId
+                        ,DanaosId
+                        ,VesselType
+                        ,VesselName
+                        ,VesselSize
+                        ,IsActive
+                        ,IsConnected
+                        ,DraftUnits
+                        ,DraftIncrement
+                        ,CbMode
+                        ,MinDraft
+                        ,MaxDraft
+                        ,MinDraftDisplacement
+                        ,MaxDraftDisplacement
+                        ,LightShipWeight
+                        ,LBP
+                        ,LOA
+                        ,Breadth
+                        ,Depth
+                        ,SummerDraft
+                        ,SummerDisplacement
+                        ,SummerDWT
+                        ,FWA
+                        ,TPC
+                        ,KeelToMast
+                        ,KeelToMastFolded
+                        ,APToMast
+                        ,MaxSpeed
+                        ,CreatedAt
+                        ,UpdatedAt
+                    FROM UKC_VesselParticulars
+                    WHERE VesselId = @VesselId
+                    ";
 
                 using var selectCmd = new SqlCommand(selectSqlServer, sqlServer);
+                selectCmd.Parameters.AddWithValue("@VesselId", vesselId);
                 using var reader = selectCmd.ExecuteReader();
 
                 int insertedCount = 0;
 
                 while (reader.Read())
                 {
-                    string vesselId = reader.GetString(0);
+                    string vesselIdFromDb = reader.GetString(0);
                     string checkSql = "SELECT COUNT(*) FROM VesselParticulars WHERE VesselId = @VesselId";
                     using var checkCmd = new SqliteCommand(checkSql, sqlite);
                     checkCmd.Parameters.AddWithValue("@VesselId", vesselId);
@@ -53,17 +66,70 @@ namespace Services
                     {
                         string insertSql = @"
                             INSERT INTO VesselParticulars (
-                                VesselId, DanaosId, VesselType, VesselName, VesselSize, IsActive,
-                                IsConnected, DraftUnits, DraftIncrement, CbMode, MinDraft, MaxDraft,
-                                MinDraftDisplacement, MaxDraftDisplacement, LightShipWeight, LBP, LOA,
-                                Breadth, Depth, SummerDraft, SummerDisplacement, SummerDWT, FWA, TPC,
-                                KeelToMast, KeelToMastFolded, APToMast, MaxSpeed, CreatedAt, UpdatedAt)
+                                VesselId
+                                ,DanaosId
+                                ,VesselType
+                                ,VesselName
+                                ,VesselSize
+                                ,IsActive
+                                ,IsConnected
+                                ,DraftUnits
+                                ,DraftIncrement
+                                ,CbMode
+                                ,MinDraft
+                                ,MaxDraft
+                                ,MinDraftDisplacement
+                                ,MaxDraftDisplacement
+                                ,LightShipWeight
+                                ,LBP
+                                ,LOA
+                                ,Breadth
+                                ,Depth
+                                ,SummerDraft
+                                ,SummerDisplacement
+                                ,SummerDWT
+                                ,FWA
+                                ,TPC
+                                ,KeelToMast
+                                ,KeelToMastFolded
+                                ,APToMast
+                                ,MaxSpeed
+                                ,CreatedAt
+                                ,UpdatedAt
+                                )
                             VALUES (
-                                @VesselId, @DanaosId, @VesselType, @VesselName, @VesselSize, @IsActive,
-                                @IsConnected, @DraftUnits, @DraftIncrement, @CbMode, @MinDraft, @MaxDraft,
-                                @MinDraftDisplacement, @MaxDraftDisplacement, @LightShipWeight, @LBP, @LOA,
-                                @Breadth, @Depth, @SummerDraft, @SummerDisplacement, @SummerDWT, @FWA, @TPC,
-                                @KeelToMast, @KeelToMastFolded, @APToMast, @MaxSpeed, @CreatedAt, @UpdatedAt)";
+                                @VesselId
+                                ,@DanaosId
+                                ,@VesselType
+                                ,@VesselName
+                                ,@VesselSize
+                                ,@IsActive
+                                ,@IsConnected
+                                ,@DraftUnits
+                                ,@DraftIncrement
+                                ,@CbMode
+                                ,@MinDraft
+                                ,@MaxDraft
+                                ,@MinDraftDisplacement
+                                ,@MaxDraftDisplacement
+                                ,@LightShipWeight
+                                ,@LBP
+                                ,@LOA
+                                ,@Breadth
+                                ,@Depth
+                                ,@SummerDraft
+                                ,@SummerDisplacement
+                                ,@SummerDWT
+                                ,@FWA
+                                ,@TPC
+                                ,@KeelToMast
+                                ,@KeelToMastFolded
+                                ,@APToMast
+                                ,@MaxSpeed
+                                ,@CreatedAt
+                                ,@UpdatedAt
+                                )
+                            ";
 
                         using var insertCmd = new SqliteCommand(insertSql, sqlite);
                         AddParemeters(insertCmd, reader);
@@ -73,17 +139,37 @@ namespace Services
                     else
                     {
                         string updateSql = @"
-                            Update VesselParticulars SET
-                                DanaosId = @DanaosId, VesselType = @VesselType, VesselName = @VesselName,
-                                VesselSize = @VesselSize, IsActive = @IsActive, IsConnected = @IsConnected, 
-                                DraftUnits = @DraftUnits, DraftIncrement = @DraftIncrement, CbMode = @CbMode, 
-                                MinDraft = @MinDraft, MaxDraft = @MaxDraft, MinDraftDisplacement = @MinDraftDisplacement, 
-                                MaxDraftDisplacement = @MaxDraftDisplacement, LightShipWeight = @LightShipWeight, 
-                                LBP = @LBP, LOA = @LOA, Breadth = @Breadth, Depth = @Depth, SummerDraft = @SummerDraft, 
-                                SummerDisplacement = @SummerDisplacement, SummerDWT = @SummerDWT, FWA = @FWA, TPC = @TPC,
-                                KeelToMast = @KeelToMast, KeelToMastFolded = @KeelToMastFolded, APToMast = @APToMast, 
-                                MaxSpeed = @MaxSpeed, CreatedAt = @CreatedAt, UpdatedAt = @UpdatedAt
-                            WHERE VesselId = @VesselId";
+                            UPDATE VesselParticulars
+                            SET DanaosId = @DanaosId
+                                ,VesselType = @VesselType
+                                ,VesselName = @VesselName
+                                ,VesselSize = @VesselSize
+                                ,IsActive = @IsActive
+                                ,IsConnected = @IsConnected
+                                ,DraftUnits = @DraftUnits
+                                ,DraftIncrement = @DraftIncrement
+                                ,CbMode = @CbMode
+                                ,MinDraft = @MinDraft
+                                ,MaxDraft = @MaxDraft
+                                ,MinDraftDisplacement = @MinDraftDisplacement
+                                ,MaxDraftDisplacement = @MaxDraftDisplacement
+                                ,LightShipWeight = @LightShipWeight
+                                ,LBP = @LBP
+                                ,LOA = @LOA
+                                ,Breadth = @Breadth
+                                ,Depth = @Depth
+                                ,SummerDraft = @SummerDraft
+                                ,SummerDisplacement = @SummerDisplacement
+                                ,SummerDWT = @SummerDWT
+                                ,FWA = @FWA
+                                ,TPC = @TPC
+                                ,KeelToMast = @KeelToMast
+                                ,KeelToMastFolded = @KeelToMastFolded
+                                ,APToMast = @APToMast
+                                ,MaxSpeed = @MaxSpeed
+                                ,CreatedAt = @CreatedAt
+                                ,UpdatedAt = @UpdatedAt
+                            ";
 
                         using var updateCmd = new SqliteCommand(updateSql, sqlite);
                         AddParemeters(updateCmd, reader);

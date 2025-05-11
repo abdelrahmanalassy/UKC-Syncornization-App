@@ -9,32 +9,24 @@ namespace Services
 {
     public class HydrostaticTableSyncService
     {
-        private readonly string? _sqliteConn;
-        private readonly string? _sqlServerConn;
-
-        public HydrostaticTableSyncService(IConfiguration config)
-        {
-            _sqliteConn = config.GetConnectionString("SQLiteDatabases");
-            _sqlServerConn = config.GetConnectionString("SqlServer");
-        }
-
-        public void Sync()
+        public void Sync(SqliteConnection sqlite, SqlConnection sqlServer, string vesselId)
         {
             try
             {
-                using var sqlite = new SqliteConnection(_sqliteConn);
-                using var sqlServer = new SqlConnection(_sqlServerConn);
-
-
-
                 string selectSqlServer = @"
-                    SELECT RowID, VesselId, RefNo, Draft, Displacement, TPC, Cb
-                    FROM UKC_HydrostaticTable";
+                    SELECT RowID
+                        ,VesselId
+                        ,RefNo
+                        ,Draft
+                        ,Displacement
+                        ,TPC
+                        ,Cb
+                    FROM UKC_HydrostaticTable
+                    WHERE VesselId = @VesselId
+                    ";
 
                 using var selectCmd = new SqlCommand(selectSqlServer, sqlServer);
-
-                sqlite.Open();
-                sqlServer.Open();
+                selectCmd.Parameters.AddWithValue("@VesselId", vesselId);
 
                 var reader = selectCmd.ExecuteReader();
 
@@ -43,7 +35,7 @@ namespace Services
                 while (reader.Read())
                 {
                     string rowId = reader.GetGuid(0).ToString();
-                    string vesselId = reader.GetString(1);
+                    string vesselIdFromDb = reader.GetString(1);
                     int refNo = reader.GetInt32(2);
                     double draft = reader.GetDouble(3);
                     double displacement = reader.GetDouble(4);
@@ -60,13 +52,29 @@ namespace Services
                     if (exists == 0)
                     {
                         string insertSql = @"
-                            INSERT INTO HydrostaticTable
-                                (RowID, VesselId, RefNo, Draft, Displacement, TPC, Cb)
-                            VALUES (@RowID, @VesselId, @RefNo, @Draft, @Displacement, @TPC, @Cb)";
+                            INSERT INTO HydrostaticTable (
+                                RowID
+                                ,VesselId
+                                ,RefNo
+                                ,Draft
+                                ,Displacement
+                                ,TPC
+                                ,Cb
+                                )
+                            VALUES (
+                                @RowID
+                                ,@VesselId
+                                ,@RefNo
+                                ,@Draft
+                                ,@Displacement
+                                ,@TPC
+                                ,@Cb
+                                )
+                            ";
 
                         using var insertCmd = new SqliteCommand(insertSql, sqlite);
                         insertCmd.Parameters.AddWithValue("@RowID", rowId);
-                        insertCmd.Parameters.AddWithValue("@VesselId", vesselId);
+                        insertCmd.Parameters.AddWithValue("@VesselId", vesselIdFromDb);
                         insertCmd.Parameters.AddWithValue("@RefNo", refNo);
                         insertCmd.Parameters.AddWithValue("@Draft", draft);
                         insertCmd.Parameters.AddWithValue("@Displacement", displacement);
@@ -79,14 +87,19 @@ namespace Services
                     else
                     {
                         string updateSql = @"
-                            Update HydrostaticTable 
-                            SET
-                                VesselId = @VesselId, RefNo = @RefNo, Draft = @Draft, Displacement = @Displacement, TPC = @TPC, Cb = @Cb
-                            WHERE RowID = @RowID";
+                            UPDATE HydrostaticTable
+                            SET VesselId = @VesselId
+                                ,RefNo = @RefNo
+                                ,Draft = @Draft
+                                ,Displacement = @Displacement
+                                ,TPC = @TPC
+                                ,Cb = @Cb
+                            WHERE RowID = @RowID
+                            ";
 
                         using var updateCmd = new SqliteCommand(updateSql, sqlite);
                         updateCmd.Parameters.AddWithValue("@RowID", rowId);
-                        updateCmd.Parameters.AddWithValue("@VesselId", vesselId);
+                        updateCmd.Parameters.AddWithValue("@VesselId", vesselIdFromDb);
                         updateCmd.Parameters.AddWithValue("@RefNo", refNo);
                         updateCmd.Parameters.AddWithValue("@Draft", draft);
                         updateCmd.Parameters.AddWithValue("@Displacement", displacement);

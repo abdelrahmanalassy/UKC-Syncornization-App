@@ -6,12 +6,12 @@ using Microsoft.Data.Sqlite;
 using Microsoft.VisualBasic;
 using System.Runtime.Serialization;
 using Services;
+using Microsoft.Data.SqlClient;
 
 
 class Program
 {
-    static IConfiguration config;
-
+    static IConfiguration? config;
     static void LogError(string message)
     {
         string logDirectory = Path.Combine(Directory.GetCurrentDirectory(), "logs");
@@ -24,28 +24,46 @@ class Program
 
     static void Main(string[] args)
     {
-        try
+        try 
         {
             config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
 
-            //CreateNewDatabase();
+            string sqliteConnString = config.GetConnectionString("Sqlite");
+            string sqlServerConnString = config.GetConnectionString("SqlServer");
+
+            string vesselId = config["SyncSettings:VesselId"];
+            string threadId = config["SyncSettings:ThreadId"];
+
+            using var sqlite = new SqliteConnection(sqliteConnString);
+            using var sqlServer = new SqlConnection(sqlServerConnString);
+
+            sqlite.Open();
+            sqlServer.Open();
+
+            // CreateNewDatabase();
 
             Console.WriteLine("Starting Full Syncronization...");
 
-            SyncHydrostaticTable();
-            SyncVesselParticularsTable();
+            var vesselParticularsSync = new VesselParticularsSyncService();
+            vesselParticularsSync.Sync(sqlite, sqlServer, vesselId);
 
-            SyncThreadsTableFromSQLServerToSQLite();
-            SyncThreadsTableFromSQLiteToSQLServer();
+            var hydrostaticTableSync = new HydrostaticTableSyncService();
+            hydrostaticTableSync.Sync(sqlite, sqlServer, vesselId);
 
-            SyncMessagesTableFromSQLServerToSQLite();
-            SyncMessagesTableFromSQLiteToSQLServer();
+            var threadsSync = new ThreadsSyncService();
+            threadsSync.SyncThreadsFromSQLServerToSqlite(vesselId, sqlite, sqlServer);
+            threadsSync.SyncThreadsFromSQLiteToSqlServer(sqlite, sqlServer);
 
-            SyncChangeLogTableFromSQLServerToSQLite();
-            SyncChangeLogTableFromSQLiteToSQLServer();
+            var messagesSync = new MessagesSyncService();
+            messagesSync.SyncMessagesFromSQLServerToSQLite(threadId, sqlite, sqlServer);
+            messagesSync.SyncMessagesFromSQLiteToSQLServer(sqlite, sqlServer);
+
+            var ChangeLogSync = new ChangeLogSyncService();
+            ChangeLogSync.SyncChangeLogFromSQLServerToSqlite(vesselId, sqlite, sqlServer);
+            ChangeLogSync.SyncChangeLogFromSQLiteToSqlServer(sqlite, sqlServer);
 
             Console.WriteLine("All Syncronization Tasks Completed.");
         }
@@ -56,7 +74,8 @@ class Program
             LogError(errorMsg);
         }
     }
-    /* // To create the new database with required tables
+    /*
+     // To create the new database with required tables
         static void CreateNewDatabase()
         {
             Console.WriteLine("Enter a new SQLite Database name (e.g., CoupaVessel.db):");
@@ -97,139 +116,4 @@ class Program
             }
         }
     */
-    static void SyncHydrostaticTable()
-    {
-        Console.WriteLine("Start Syncing...");
-
-        try
-        {
-            var hydroSync = new HydrostaticTableSyncService(config);
-            hydroSync.Sync();
-        }
-        catch (Exception ex)
-        {
-            string errorMsg = $"Failed synchronized from Hydrostatic table to SQL Server: {ex.Message}";
-            Console.WriteLine(errorMsg);
-            LogError(errorMsg);
-        }
-    }
-
-    static void SyncVesselParticularsTable()
-    {
-        Console.WriteLine("Start Syncing...");
-
-        try
-        {
-            var particularsSync = new VesselParticularsSyncService(config);
-            particularsSync.Sync();
-        }
-        catch (Exception ex)
-        {
-            string errorMsg = $"Failed synchronized from Vessel Particulars table to SQL Server: {ex.Message}";
-            Console.WriteLine(errorMsg);
-            LogError(errorMsg);
-        }
-    }
-
-    static void SyncThreadsTableFromSQLServerToSQLite()
-    {
-        Console.WriteLine("Start Syncing...");
-
-        try
-        {
-            var threadsSync = new ThreadsSyncService(config);
-            threadsSync.SyncThreadsFromSQLServerToSqlite();
-        }
-        catch (Exception ex)
-        {
-            string errorMsg = $"Failed synchronized from Threads table to SQL Server: {ex.Message}";
-            Console.WriteLine(errorMsg);
-            LogError(errorMsg);
-        }
-    }
-
-    static void SyncThreadsTableFromSQLiteToSQLServer()
-    {
-        Console.WriteLine("Start Syncing...");
-
-        try
-        {
-            var threadsSync = new ThreadsSyncService(config);
-            threadsSync.SyncThreadsFromSQLiteToSqlServer();
-        }
-        catch (Exception ex)
-        {
-            string errorMsg = $"Failed synchronized from Threads table to SQL Server: {ex.Message}";
-            Console.WriteLine(errorMsg);
-            LogError(errorMsg);
-        }
-    }
-
-    static void SyncMessagesTableFromSQLServerToSQLite()
-    {
-        Console.WriteLine("Start Syncing...");
-
-        try
-        {
-            var messagesSync = new MessagesSyncService(config);
-            messagesSync.SyncMessagesFromSQLServerToSQLite();
-        }
-        catch (Exception ex)
-        {
-            string errorMsg = $"Failed synchronized from Messages table to SQL Server: {ex.Message}";
-            Console.WriteLine(errorMsg);
-            LogError(errorMsg);
-        }
-    }
-
-    static void SyncMessagesTableFromSQLiteToSQLServer()
-    {
-        Console.WriteLine("Start Syncing...");
-
-        try
-        {
-            var messagesSync = new MessagesSyncService(config);
-            messagesSync.SyncMessagesFromSQLiteToSQLServer();
-        }
-        catch (Exception ex)
-        {
-            string errorMsg = $"Failed synchronized from Messages table to SQL Server: {ex.Message}";
-            Console.WriteLine(errorMsg);
-            LogError(errorMsg);
-        }
-    }
-
-    static void SyncChangeLogTableFromSQLServerToSQLite()
-    {
-        Console.WriteLine("Start Syncing...");
-
-        try
-        {
-            var changeLogSync = new ChangeLogSyncService(config);
-            changeLogSync.SyncChangeLogFromSQLServerToSqlite();
-        }
-        catch (Exception ex)
-        {
-            string errorMsg = $"Failed synchronized from Messages table to SQL Server: {ex.Message}";
-            Console.WriteLine(errorMsg);
-            LogError(errorMsg);
-        }
-    }
-
-    static void SyncChangeLogTableFromSQLiteToSQLServer()
-    {
-        Console.WriteLine("Start Syncing...");
-
-        try
-        {
-            var changeLogSync = new ChangeLogSyncService(config);
-            changeLogSync.SyncChangeLogFromSQLiteToSqlServer();
-        }
-        catch (Exception ex)
-        {
-            string errorMsg = $"Failed synchronized from Messages table to SQL Server: {ex.Message}";
-            Console.WriteLine(errorMsg);
-            LogError(errorMsg);
-        }
-    }
 }
