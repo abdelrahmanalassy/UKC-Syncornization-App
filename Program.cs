@@ -35,7 +35,6 @@ class Program
             string sqlServerConnString = config.GetConnectionString("SqlServer");
 
             string vesselId = config["SyncSettings:VesselId"];
-            string threadId = config["SyncSettings:ThreadId"];
 
             using var sqlite = new SqliteConnection(sqliteConnString);
             using var sqlServer = new SqlConnection(sqlServerConnString);
@@ -48,17 +47,17 @@ class Program
             Console.WriteLine("Starting Full Syncronization...");
 
             var vesselParticularsSync = new VesselParticularsSyncService();
-            vesselParticularsSync.Sync(sqlite, sqlServer, vesselId);
+            vesselParticularsSync.Sync(vesselId, sqlite, sqlServer);
 
             var hydrostaticTableSync = new HydrostaticTableSyncService();
-            hydrostaticTableSync.Sync(sqlite, sqlServer, vesselId);
+            hydrostaticTableSync.Sync(vesselId, sqlite, sqlServer);
 
             var threadsSync = new ThreadsSyncService();
             threadsSync.SyncThreadsFromSQLServerToSqlite(vesselId, sqlite, sqlServer);
             threadsSync.SyncThreadsFromSQLiteToSqlServer(sqlite, sqlServer);
 
             var messagesSync = new MessagesSyncService();
-            messagesSync.SyncMessagesFromSQLServerToSQLite(threadId, sqlite, sqlServer);
+            messagesSync.SyncMessagesFromSQLServerToSQLite(vesselId, sqlite, sqlServer);
             messagesSync.SyncMessagesFromSQLiteToSQLServer(sqlite, sqlServer);
 
             var ChangeLogSync = new ChangeLogSyncService();
@@ -74,8 +73,8 @@ class Program
             LogError(errorMsg);
         }
     }
-    /*
-     // To create the new database with required tables
+    
+    /*  To create the new database with insert a required tables (VesselParticulars, Hydrostatic, Threads, Masseges, ChangLog tabels)
         static void CreateNewDatabase()
         {
             Console.WriteLine("Enter a new SQLite Database name (e.g., CoupaVessel.db):");

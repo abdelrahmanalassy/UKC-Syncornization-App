@@ -36,3 +36,13 @@ The statement has been terminated.
 The statement has been terminated.
 [5/6/2025 8:08:27 PM] [Table: Threads] Unable to cast object of type 'System.Guid' to type 'System.String'.
 [5/6/2025 8:11:09 PM] [Table: Messages] Unable to cast object of type 'System.Guid' to type 'System.String'.
+[5/12/2025 4:50:27 PM] [Table: Threads] SQLite Error 19: 'UNIQUE constraint failed: Threads.ThreadId'.
+[5/12/2025 4:50:28 PM] [Table: Messages] SQLite Error 19: 'FOREIGN KEY constraint failed'.
+[5/12/2025 4:52:43 PM] [Table: Messages] SQLite Error 19: 'FOREIGN KEY constraint failed'.
+[5/12/2025 4:53:40 PM] [Table: Threads] SQLite Error 19: 'UNIQUE constraint failed: Threads.ThreadId'.
+[5/12/2025 4:54:15 PM] [Table: Messages] SQLite Error 19: 'FOREIGN KEY constraint failed'.
+[5/12/2025 4:55:59 PM] [Table: Threads] SQLite Error 19: 'UNIQUE constraint failed: Threads.ThreadId'.
+[5/12/2025 5:34:57 PM] [Table: Messages] SQLite Error 19: 'FOREIGN KEY constraint failed'.
+[5/12/2025 5:59:40 PM] [Table: Messages] Must add values for the following parameters: @MessageId
+[5/12/2025 6:07:06 PM] [Table: Messages] SQLite Error 19: 'FOREIGN KEY constraint failed'.
+[5/12/2025 6:20:47 PM] [Table: Messages] SQLite Error 19: 'FOREIGN KEY constraint failed'.

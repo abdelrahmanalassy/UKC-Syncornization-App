@@ -9,33 +9,35 @@ namespace Services
 {
     public class MessagesSyncService
     {
-        public void SyncMessagesFromSQLServerToSQLite(string threadId, SqliteConnection sqlite, SqlConnection sqlServer)
+        public void SyncMessagesFromSQLServerToSQLite(string vesselId, SqliteConnection sqlite, SqlConnection sqlServer)
         {
             try
             {
                 string selectSql = @"
                     SELECT MessageId
-                        ,ThreadId
+                        ,m.ThreadId
                         ,UserId
                         ,ExternalUser
                         ,MessageType
                         ,CalculationData
                         ,Comments
-                        ,IsSynced
-                        ,CreatedAt
-                    FROM UKC_Messages
-                    WHERE ThreadId = @ThreadId
+                        ,m.IsSynced
+                        ,m.CreatedAt
+                    FROM UKC_Messages m
+                    LEFT JOIN UKC_Threads t ON m.ThreadId = t.ThreadId
+                    WHERE t.VesselId = @VesselId
                     ";
 
                 using var selectCmd = new SqlCommand(selectSql, sqlServer);
-                selectCmd.Parameters.AddWithValue("@ThreadId", threadId);
+                selectCmd.Parameters.AddWithValue("@VesselId", vesselId);
                 using var reader = selectCmd.ExecuteReader();
 
                 int insertedCount = 0;
 
                 while (reader.Read())
                 {
-                    string messageId = reader.GetGuid(0).ToString();
+                    string messageId = reader.GetGuid(0).ToString("D").ToUpper();
+                    string threadId = reader.GetGuid(1).ToString("D").ToUpper();
                     string checkSql = "SELECT COUNT(*) FROM Messages WHERE MessageId = @MessageId";
                     using var checkCmd = new SqliteCommand(checkSql, sqlite);
                     checkCmd.Parameters.AddWithValue("@MessageId", messageId);
@@ -90,7 +92,7 @@ namespace Services
                             ";
 
                         using var updateCmd = new SqliteCommand(updateSql, sqlite);
-                        AddParemeters(updateCmd, reader);
+                        AddParemeters(updateCmd, reader);                     
                         updateCmd.ExecuteNonQuery();
                     }
                 }
@@ -129,6 +131,7 @@ namespace Services
                 while (reader.Read())
                 {
                     string messageId = reader.GetGuid(0).ToString();
+                    string threadId = reader.GetString(1);
                     string checkSql = "SELECT COUNT(*) FROM UKC_Messages WHERE MessageId = @MessageId";
                     using var checkCmd = new SqlCommand(checkSql, sqlServer);
                     checkCmd.Parameters.AddWithValue("@MessageId", messageId);

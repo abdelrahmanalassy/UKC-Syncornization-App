@@ -26,7 +26,7 @@ namespace Services
 
                 while (reader.Read())
                 {
-                    string threadId = reader.GetGuid(0).ToString();
+                    string threadId = reader.GetGuid(0).ToString("D").ToUpper();
                     string checkSql = "SELECT COUNT(*) FROM Threads WHERE ThreadId = @ThreadId";
                     using var checkCmd = new SqliteCommand(checkSql, sqlite);
                     checkCmd.Parameters.AddWithValue("@ThreadId", threadId);
@@ -70,7 +70,7 @@ namespace Services
                                 ,PortID = @PortID
                                 ,CreatedAt = @CreatedAt
                                 ,UpdatedAt = @UpdatedAt
-                            WHERE VesselId = @VesselId
+                            WHERE ThreadId = @ThreadId
                             ";
 
                         using var updateCmd = new SqliteCommand(updateSql, sqlite);
@@ -104,7 +104,7 @@ namespace Services
 
                 while (reader.Read())
                 {
-                    string threadId = reader.GetString(0);
+                    string threadId = reader.GetGuid(0).ToString();
                     string checkSql = "SELECT COUNT(*) FROM UKC_Threads WHERE ThreadId = @ThreadId";
                     using var checkCmd = new SqlCommand(checkSql, sqlServer);
                     checkCmd.Parameters.AddWithValue("@ThreadId", threadId);

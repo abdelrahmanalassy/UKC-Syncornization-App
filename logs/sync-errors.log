@@ -127,3 +127,13 @@ The statement has been terminated.
 [5/11/2025 11:35:32 AM] [Table: Messages] Conversion failed when converting from a character string to uniqueidentifier.
 [5/11/2025 11:39:03 AM] [Table: Messages] Conversion failed when converting from a character string to uniqueidentifier.
 [5/11/2025 11:44:37 AM] [Table: Messages] SQLite Error 19: 'FOREIGN KEY constraint failed'.
+[5/12/2025 4:04:09 PM] [Table: Messages] An expression of non-boolean type specified in a context where a condition is expected, near 'VesselId'.
+[5/12/2025 4:06:21 PM] [Table: Messages] SQLite Error 19: 'FOREIGN KEY constraint failed'.
+[5/12/2025 4:09:52 PM] [Table: Threads] SQLite Error 19: 'UNIQUE constraint failed: Threads.ThreadId'.
+[5/12/2025 4:09:52 PM] [Table: Messages] SQLite Error 19: 'FOREIGN KEY constraint failed'.
+[5/12/2025 4:27:28 PM] [Table: Messages] Must add values for the following parameters: 
+[5/12/2025 4:32:24 PM] [Table: Messages] Must add values for the following parameters: 
+[5/12/2025 4:36:04 PM] [Table: Threads] SQLite Error 19: 'UNIQUE constraint failed: Threads.ThreadId'.
+[5/12/2025 4:36:04 PM] [Table: Messages] SQLite Error 19: 'FOREIGN KEY constraint failed'.
+[5/12/2025 4:39:43 PM] [Table: Messages] SQLite Error 19: 'FOREIGN KEY constraint failed'.
+[5/12/2025 6:27:33 PM] [Table: Messages] SQLite Error 19: 'FOREIGN KEY constraint failed'.

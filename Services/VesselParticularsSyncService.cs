@@ -8,7 +8,7 @@ namespace Services
 {
     public class VesselParticularsSyncService
     {
-        public void Sync(SqliteConnection sqlite, SqlConnection sqlServer, string vesselId)
+        public void Sync(string vesselId, SqliteConnection sqlite, SqlConnection sqlServer)
         {
             try
             {
@@ -169,6 +169,7 @@ namespace Services
                                 ,MaxSpeed = @MaxSpeed
                                 ,CreatedAt = @CreatedAt
                                 ,UpdatedAt = @UpdatedAt
+                                WHERE VesselId = @VesselId
                             ";
 
                         using var updateCmd = new SqliteCommand(updateSql, sqlite);

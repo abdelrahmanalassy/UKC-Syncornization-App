@@ -9,7 +9,7 @@ namespace Services
 {
     public class HydrostaticTableSyncService
     {
-        public void Sync(SqliteConnection sqlite, SqlConnection sqlServer, string vesselId)
+        public void Sync(string vesselId, SqliteConnection sqlite, SqlConnection sqlServer)
         {
             try
             {
